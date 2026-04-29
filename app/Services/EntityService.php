@@ -27,7 +27,7 @@ class EntityService
     public function recentTickets(Entity $entity): Collection
     {
         return $entity->tickets()
-            ->with(['status', 'contact', 'operator'])
+            ->with(['inbox', 'status', 'type', 'contact', 'operator'])
             ->withCount('messages')
             ->latest()
             ->take(20)
@@ -49,5 +49,10 @@ class EntityService
     public function delete(Entity $entity): void
     {
         $entity->delete();
+    }
+
+    public function allSimple(): Collection
+    {
+        return Entity::orderBy('name')->get(['id', 'name']);
     }
 }

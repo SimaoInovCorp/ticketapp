@@ -14,7 +14,7 @@ class StoreEntityRequest extends FormRequest
     public function rules(): array
     {
         return [
-            'name'           => ['required', 'string', 'max:255', 'regex:/^[A-Za-zÀ-ÿ\'"\s-]+$/u'],
+            'name'           => ['required', 'string', 'max:255', 'regex:/^[A-Za-zÀ-ÿ0-9\',\.\s&()\/-]+$/u'],
             'nif'            => ['nullable', 'string', 'max:20', 'regex:/^\d{9}$/'], // 9 digits for PT NIF
             'email'          => ['nullable', 'email', 'max:255'],
             'phone'          => ['nullable', 'string', 'max:20', 'regex:/^\+?\d{9,15}$/'],

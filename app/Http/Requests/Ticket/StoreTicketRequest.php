@@ -18,6 +18,7 @@ class StoreTicketRequest extends FormRequest
             'inbox_id'           => ['required', 'integer', 'exists:inboxes,id'],
             'ticket_type_id'     => ['nullable', 'integer', 'exists:ticket_types,id'],
             'entity_id'          => ['nullable', 'integer', 'exists:entities,id'],
+            'operator_id'        => ['nullable', 'integer', 'exists:users,id'],
             'knowledge_emails'   => ['nullable', 'array', 'max:5'],
             'knowledge_emails.*' => ['email', 'max:255'],
             'message'            => ['required', 'string', 'min:10', 'max:5000'],
@@ -27,6 +28,8 @@ class StoreTicketRequest extends FormRequest
 
         if ($this->user()->isOperator()) {
             $rules['contact_id'] = ['required', 'integer', 'exists:contacts,id'];
+        } else {
+            $rules['contact_id'] = ['nullable', 'integer', 'exists:contacts,id'];
         }
 
         return $rules;

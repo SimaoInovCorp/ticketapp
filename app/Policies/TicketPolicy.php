@@ -15,15 +15,22 @@ class TicketPolicy
     public function view(User $user, Ticket $ticket): bool
     {
         if ($user->isOperator()) {
+            if (!$ticket->inbox_id) {
+                return false;
+            }
             return $ticket->inbox->operators()->where('users.id', $user->id)->exists();
         }
 
         $contact = $user->contact()->with('entities')->first();
-        if (!$contact || !$ticket->entity_id) {
+        if (!$contact) {
             return false;
         }
 
-        return $contact->entities->contains('id', $ticket->entity_id);
+        if ($ticket->contact_id && $ticket->contact_id === $contact->id) {
+            return true;
+        }
+
+        return $ticket->entity_id && $contact->entities->contains('id', $ticket->entity_id);
     }
 
     public function create(User $user): bool
@@ -33,12 +40,18 @@ class TicketPolicy
 
     public function update(User $user, Ticket $ticket): bool
     {
+        if (!$ticket->inbox_id) {
+            return false;
+        }
         return $user->isOperator() &&
             $ticket->inbox->operators()->where('users.id', $user->id)->exists();
     }
 
     public function delete(User $user, Ticket $ticket): bool
     {
+        if (!$ticket->inbox_id) {
+            return false;
+        }
         return $user->isOperator() &&
             $ticket->inbox->operators()->where('users.id', $user->id)->exists();
     }
