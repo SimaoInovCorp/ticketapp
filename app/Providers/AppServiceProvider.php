@@ -4,9 +4,11 @@ namespace App\Providers;
 
 use App\Models\Contact;
 use App\Models\Entity;
+use App\Models\Inbox;
 use App\Models\Ticket;
 use App\Policies\ContactPolicy;
 use App\Policies\EntityPolicy;
+use App\Policies\InboxPolicy;
 use App\Policies\TicketPolicy;
 use Carbon\CarbonImmutable;
 use Illuminate\Support\Facades\Date;
@@ -39,6 +41,7 @@ class AppServiceProvider extends ServiceProvider
         Gate::policy(Ticket::class, TicketPolicy::class);
         Gate::policy(Entity::class, EntityPolicy::class);
         Gate::policy(Contact::class, ContactPolicy::class);
+        Gate::policy(Inbox::class, InboxPolicy::class);
     }
 
     /**
